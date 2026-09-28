@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoCo HR Software</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- PAGE 1: Luxury Office Login -->
+    <div id="page1" class="page active">
+        <div class="login-card">
+            <div class="logo-box">
+                <i class="fa-solid fa-building-user logo-icon"></i>
+            </div>
+            <h2>CoCo HR Software</h2>
+            <p class="subtitle">Welcome to CoCo HR Software</p>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="loginName" placeholder="User Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-id-badge"></i>
+                    <input type="text" id="loginPosition" placeholder="Position" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-key"></i>
+                    <input type="password" id="loginPassword" maxlength="5" placeholder="5-Digit Password" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <input type="password" id="loginConfirmPassword" maxlength="5" placeholder="Confirm 5-Digit Password" required>
+                </div>
+                <p id="loginError" class="error-msg"></p>
+                <button type="submit" class="btn-gold">Login System</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PAGE 2: Dashboard -->
+    <div id="page2" class="page">
+        <header class="header-bar">
+            <div class="brand"><i class="fa-solid fa-building-user"></i> CoCo HR</div>
+            <div class="nav-right">
+                <button onclick="navigateTo('page12')" class="btn-icon" title="Settings"><i class="fa-solid fa-gear"></i> Settings</button>
+                <button onclick="logout()" class="btn-outline"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            </div>
+        </header>
+
+        <div class="dashboard-container">
+            <h1 class="welcome-text">Executive Dashboard</h1>
+            <div class="icon-grid">
+                <div class="dash-card" onclick="navigateTo('page3')">
+                    <i class="fa-solid fa-users dash-icon"></i>
+                    <h3>Total Employees</h3>
+                    <div class="badge-count" id="dashEmpCount">0</div>
+                </div>
+
+                <div class="dash-card" onclick="navigateTo('page8')">
+                    <i class="fa-solid fa-sitemap dash-icon"></i>
+                    <h3>Total Departments</h3>
+                    <p>Manage & Positions</p>
+                </div>
+
+                <div class="dash-card" onclick="navigateTo('page10')">
+                    <i class="fa-solid fa-file-invoice-dollar dash-icon"></i>
+                    <h3>Salary Paid Info</h3>
+                    <p>Vouchers & History</p>
+                </div>
+
+                <div class="dash-card" onclick="navigateTo('page11')">
+                    <i class="fa-solid fa-calendar-check dash-icon"></i>
+                    <h3>Attendance Record</h3>
+                    <p>Daily Attendance & Logs</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 3: Total Employees -->
+    <div id="page3" class="page">
+        <div class="top-nav">
+            <button onclick="navigateTo('page2')" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Dashboard</button>
+            <h2>Total Employees Management</h2>
+        </div>
+
+        <div class="action-bar">
+            <button onclick="openNewEmpForm()" class="btn-gold"><i class="fa-solid fa-user-plus"></i> New Employee</button>
+            <button onclick="navigateTo('page5')" class="btn-gold-secondary"><i class="fa-solid fa-calculator"></i> Salary Payroll</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Department</th>
+                        <th>Position</th>
+                        <th>Phone</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PAGE 4: Add/Edit Employee Form -->
+    <div id="page4" class="page">
+        <div class="top-nav">
+            <button onclick="navigateTo('page3')" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <h2 id="empFormTitle">Add New Employee</h2>
+        </div>
+
+        <div class="form-card">
+            <input type="hidden" id="empEditIndex">
+            <div class="form-group">
+                <label>Employee ID</label>
+                <input type="text" id="empId" placeholder="EMP-001" required>
+            </div>
+            <div class="form-group">
+                <label>Employee Name</label>
+                <input type="text" id="empName" placeholder="Full Name" required>
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+                <select id="empGender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" id="empDob" required>
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" id="empPhone" placeholder="09xxxxxxxxx" required>
+            </div>
+            <div class="form-group">
+                <label>Address</label>
+                <textarea id="empAddress" rows="3" required></textarea>
+            </div>
+            <button onclick="saveEmployee()" class="btn-gold">Save Employee</button>
+        </div>
+    </div>
+
+    <!-- PAGE 5: Salary Payroll List -->
+    <div id="page5" class="page">
+        <div class="top-nav">
+            <button onclick="navigateTo('page3')" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <h2>Salary Payroll List</h2>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Phone</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="payrollTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PAGE 6: Payroll Calculation & Voucher -->
+    <div id="page6" class="page">
+        <div class="top-nav">
+            <button onclick="navigateTo('page5')" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <h2>Payroll Calculation</h2>
+        </div>
+
+        <div class="payroll-layout">
+            <div class="form-card">
+                <h3>Enter Salary Details</h3>
+                <div class="form-group">
+                    <label>Employee ID</label>
+                    <input type="text" id="calcEmpId" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Employee Name</label>
+                    <input type="text" id="calcEmpName" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Position</label>
+                    <input type="text" id="calcPosition" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Attendance Status (Today)</label>
+                    <input type="text" id="calcAttendance" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Basic Salary ($)</label>
+                    <input type="number" id="basicSalary" value="0" oninput="calculateSalary()">
+                </div>
+                <div class="form-group">
+                    <label>Allowance ($)</label>
+                    <input type="number" id="allowance" value="0" oninput="calculateSalary()">
+                </div>
+                <div class="form-group">
+                    <label>Overtime ($)</label>
+                    <input type="number" id="overtime" value="0" oninput="calculateSalary()">
+                </div>
+                <div class="form-group">
+                    <label>Deduction ($)</label>
+                    <input type="number" id="deduction" value="0" oninput="calculateSalary()">
+                </div>
+            </div>
+
+            <div class="voucher-card" id="voucherPrintArea">
+                <div class="voucher-header">
+                    <i class="fa-solid fa-building-user"></i>
+                    <h2>CoCo HR SOFTWARE</h2>
+                    <p>Official Payslip Voucher</p>
+                </div>
+                <hr>
+                <p><strong>Date & Time:</strong> <span id="voucherDate"></span></p>
+                <p><strong>Employee ID:</strong> <span id="vEmpId"></span></p>
+                <p><strong>Name:</strong> <span id="vEmpName"></span></p>
+                <p><strong>Position:</strong> <span id="vPosition"></span></p>
+                <p><strong>Attendance:</strong> <span id="vAttendance"></span></p>
+                <hr>
+                <div class="voucher-line"><span>Basic Salary:</span> <span id="vBasic">$0</span></div>
+                <div class="voucher-line"><span>Allowance:</span> <span id="vAllowance">$0</span></div>
+                <div class="voucher-line"><span>Overtime:</span> <span id="vOT">$0</span></div>
+                <div class="voucher-line"><span>Deduction:</span> <span id="vDeduction">-$0</span></div>
+                <hr>
+                <div class="voucher-total">
+                    <span>NET SALARY:</span>
+                    <span id="vNetSalary">$0</span>
+                </div>
+                <div class="voucher-actions no-print">
+                    <button onclick="saveSalaryToPage10()" class="btn-gold"><i class="fa-solid fa-floppy-disk"></i> Save Record</button>
+                    <button onclick="printVoucher()" class="btn-gold-secondary"><i class="fa-solid fa-print"></i> Print Voucher (PDF)</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 7: Employee Personal Details -->
+    <div id="page7" class="page">
+        <div class="top-nav">
+            <button onclick="navigateTo('page3')" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back to List</button>
+            <h2>Employee Personal Details</h2>
+        </div>
+
+        <div class="form-card">
+            <input type="hidden" id="detailEmpIdHidden">
+            <div class="form-group">
+                <label>Employee ID</label>
+                <input type="text" id="detailId" readonly>
+            </div>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="detailName">
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+                <select id="detailGender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" id="detailDob">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" id="detailPhone">
+            </div>
+            <div class="form-group">
+                <label>Address</label>
+                <textarea id="detailAddress" rows="3"></textarea>
+            </div>
+            <button onclick="updatePersonalDetails()" class="btn-gold">Save Changes</button>
+        </div>
+    </div>
+
+    <!-- PAGE 8: Department List -->
+    <div id="page8" class="page">
+        <div class="top-nav">
+            <button onclick="navigateTo('page2')" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Dashboard</button>
+            <h2>Department Management</h2>
+        </div>
+
+        <div class="action-bar">
+            <button onclick="navigateTo('page9')" class="btn-gold"><i class="fa-solid fa-folder-plus"></i> Add Department</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Department Name</th>
+                        <th>Total Employees</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="departmentTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PAGE 9: Add Department -->
+    <div id="page9" class="page">
+        <div class="top-nav">
+            <button onclick="navigateTo('page8')" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <h2>Create New Department</h2>
+        </div>
+
+        <div class="form-card">
+            <div class="form-group">
+                <label>Department Name</label>
+                <input type="text" id="deptNameInput" placeholder="e.g. Finance, IT, HR" required>
+            </div>
+            <div class="form-group">
+                <label>Select Employees to Assign</label>
+                <div id="deptEmpCheckboxList" class="checkbox-list"></div>
+            </div>
+            <button onclick="saveDepartment()" class="btn-gold">Save Department</button>
+        </div>
+    </div>
+
+    <!-- PAGE 10: Salary Paid Information -->
+    <div id="page10" class="page">
+        <div class="top-nav">
+            <button onclick="navigateTo('page2')" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Dashboard</button>
+            <h2>Salary Paid Information</h2>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Employee Name</th>
+                        <th>Position</th>
+                        <th>Paid Date & Time</th>
+                        <th>Net Salary ($)</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="paidSalaryTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PAGE 11: Attendance Record -->
+    <div id="page11" class="page">
+        <div class="top-nav">
+            <button onclick="navigateTo('page2')" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Dashboard</button>
+            <h2>Daily Attendance Record</h2>
+        </div>
+
+        <div class="action-bar" style="justify-content: space-between;">
+            <button onclick="navigateTo('page14')" class="btn-gold-secondary"><i class="fa-solid fa-clock-rotate-left"></i> Attendance History</button>
+            <button onclick="submitTodayAttendance()" class="btn-gold"><i class="fa-solid fa-check-double"></i> Today Done</button>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Employee Name</th>
+                        <th>Position</th>
+                        <th>Today Status</th>
+                        <th>Record Status</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- PAGE 12: Dashboard Settings (Password Management) -->
+    <div id="page12" class="page">
+        <div class="top-nav">
+            <button onclick="navigateTo('page2')" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Dashboard</button>
+            <h2>Security & Password Settings</h2>
+        </div>
+
+        <div class="form-card">
+            <h3>Current System Credentials</h3>
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Admin Name</label>
+                <input type="text" id="settingName" readonly>
+            </div>
+            <div class="form-group">
+                <label>Admin Position</label>
+                <input type="text" id="settingPosition" readonly>
+            </div>
+            <div class="form-group">
+                <label>Current Saved Password</label>
+                <input type="text" id="settingPasswordShow" readonly style="color: var(--gold); font-weight: bold;">
+            </div>
+            <hr style="border-color: var(--border-color); margin: 20px 0;">
+            <h3>Update Password</h3>
+            <div class="form-group">
+                <label>New 5-Digit Password</label>
+                <input type="password" id="newPassInput" maxlength="5">
+            </div>
+            <button onclick="updateSystemPassword()" class="btn-gold">Update Password</button>
+        </div>
+    </div>
+
+    <!-- PAGE 13: Department Employee Position Settings -->
+    <div id="page13" class="page">
+        <div class="top-nav">
+            <button onclick="navigateTo('page8')" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back to Depts</button>
+            <h2 id="page13DeptTitle">Assign Positions in Department</h2>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Employee Name</th>
+                        <th>Position Input</th>
+                    </tr>
+                </thead>
+                <tbody id="deptPosTableBody"></tbody>
+            </table>
+        </div>
+        <div style="margin-top:20px; text-align:center;">
+            <button onclick="saveDepartmentPositions()" class="btn-gold">Save Positions</button>
+        </div>
+    </div>
+
+    <!-- PAGE 14: Attendance History Record -->
+    <div id="page14" class="page">
+        <div class="top-nav">
+            <button onclick="navigateTo('page11')" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <h2>Attendance History Log</h2>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceHistoryTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal for Reprinting Paid Voucher -->
+    <div id="voucherModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeVoucherModal()">&times;</span>
+            <div id="reprintVoucherArea"></div>
+            <div style="margin-top:15px; text-align:center;" class="no-print">
+                <button onclick="window.print()" class="btn-gold"><i class="fa-solid fa-print"></i> Print PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
